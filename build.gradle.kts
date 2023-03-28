@@ -1,20 +1,27 @@
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
-extensions.configure<com.linkedin.gradle.python.PythonExtension>("python") {
-    details.setSystemPythonInterpreter("/usr/local/bin/python3")
-    details.setPythonVersion("3.9")
-}
-
 plugins {
-    id("com.linkedin.python-sdist") version "0.3.9"
-}
-
-dependencies {
-    python 'pypi:requests:2.9.1'
-    test 'pypi:mock:2.0.0'
+    id("ru.vyarus.use-python") version "3.0.0"
 }
 
 repositories {
-    pyGradlePyPi()
+    mavenCentral()
 }
+
+python {
+    //pip 'module1:1.0'
+    //pip 'module2:1.0'
+    minPythonVersion = "3.2"
+    minPipVersion = "9.0.1"
+
+}
+
+tasks.register<ru.vyarus.gradle.plugin.python.task.PythonTask>("myTask") {
+    command = "-c print('sample')"
+}
+
+tasks.register<ru.vyarus.gradle.plugin.python.task.PythonTask>("discoverTests") {
+    command = "-m unittest discover -s src"
+}
+
